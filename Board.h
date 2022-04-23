@@ -26,11 +26,12 @@ public:
     Field& getFieldState(int y, int x);
 
     void genPossibleMoves(Board *&moves, int& count, Field active);
+    bool isFinalState();
 
     void printState();
 
     ~Board();
-
+    bool checkInDirection(int y0, int x0, int dy, int dx, Field field);
 
 private:
 
@@ -39,6 +40,8 @@ private:
     int N; //height
     int M; //width
     int K; //winning condition
+
+
 
 
 };

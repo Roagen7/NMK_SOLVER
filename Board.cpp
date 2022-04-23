@@ -107,6 +107,13 @@ void Board::genPossibleMoves(Board *&moves, int& count, Field active) {
     count = 0;
     moves = new Board[N*M];
 
+    if(isFinalState()){
+
+        return;
+
+    }
+
+
     for(int y = 0; y < N; y++){
 
         for(int x = 0; x < M; x++){
@@ -133,6 +140,56 @@ Board::~Board() {
 
 
     delete[] state;
+
+}
+
+bool Board::isFinalState() {
+    for(int y = 0; y < N; y++){
+
+        for(int x = 0; x < M; x++){
+
+            auto fState = getFieldState(y,x);
+
+            if(fState == Field::P1 || fState == Field::P2){
+
+                bool isWin;
+                isWin = checkInDirection(y,x,1,0,fState);
+                isWin = isWin || checkInDirection(y,x,0,1,fState);
+                isWin = isWin || checkInDirection(y,x,1,1,fState);
+                isWin = isWin || checkInDirection(y,x,1,-1,fState);
+
+                if(isWin){
+
+                    return true;
+
+                }
+            }
+
+        }
+
+    }
+
+    return false;
+}
+
+bool Board::checkInDirection(int y0, int x0, int dy, int dx, Field field) {
+
+    int yCurrent = y0;
+    int xCurrent = x0;
+
+    int counter = 0;
+
+    while(yCurrent >= 0 && xCurrent >= 0 &&
+          yCurrent < N && xCurrent < M &&
+          getFieldState(yCurrent,xCurrent) == field){
+
+        yCurrent += dy;
+        xCurrent += dx;
+        counter++;
+
+    }
+
+    return counter == K;
 
 }
 

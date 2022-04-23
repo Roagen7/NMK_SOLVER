@@ -12,17 +12,19 @@ void printAllPossibleMoves(Board* board, int activePlayer);
 
 int main() {
 
-    int testBoard[] = {
-            1,0,0,
-            0,0,0,
-            0,0,0
-    };
+//    int testBoard[] = {
+//            1,2,2,
+//            1,1,1,
+//            2,2,1
+//    };
+//
+//    Board board(3,3,3, testBoard);
+//
+//    bool v = board.isFinalState();
+//
+//    printAllPossibleMoves(&board,2);
 
-    Board board(3,3,3, testBoard);
-
-    printAllPossibleMoves(&board,2);
-
-//    handleInput();
+    handleInput();
 
 
 
