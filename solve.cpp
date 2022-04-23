@@ -15,7 +15,7 @@ Board solve::bestMove(Board *board, Board::Field activePlayer) {
 
         for(int i = 0; i < numOfMoves; i++){
 
-            int val = minimax(moves + i,activePlayer);
+            int val = minimax(moves + i,Board::Field::P2,INT_MIN,INT_MAX);
 
             if(val > bestMoveVal) {
 
@@ -32,7 +32,7 @@ Board solve::bestMove(Board *board, Board::Field activePlayer) {
 
         for(int i = 0; i < numOfMoves; i++){
 
-            int val = minimax(moves + i, activePlayer);
+            int val = minimax(moves + i, Board::Field::P1, INT_MIN, INT_MAX);
 
             if(val < bestMoveVal){
 
@@ -69,9 +69,11 @@ int solve::eval(Board *board) {
 
     }
 
+    return EVAL_TIE;
+
 }
 
-int solve::minimax(Board *board, Board::Field activePlayer, int depth) {
+int solve::minimax(Board *board, Board::Field activePlayer, int alpha, int beta, int depth) {
 
     Board* moves = nullptr;
     int numOfMoves, optimalVal;
@@ -87,10 +89,16 @@ int solve::minimax(Board *board, Board::Field activePlayer, int depth) {
 
         for(int i = 0; i < numOfMoves; i++){
 
-            int newVal = minimax(moves + i,Board::Field::P2, depth+1);
+            int newVal = minimax(moves + i,Board::Field::P2, alpha, beta, depth+1);
             optimalVal = optimalVal > newVal ? optimalVal : newVal; // max(optimalVal, newVal)
+            alpha = alpha > optimalVal ? alpha : optimalVal;
+
+            if(alpha >= beta) break;
 
         }
+
+        delete[] moves;
+        return optimalVal - depth;
 
     } else {
 
@@ -98,23 +106,24 @@ int solve::minimax(Board *board, Board::Field activePlayer, int depth) {
 
         for(int i = 0; i < numOfMoves; i++){
 
-            int newVal = minimax(moves + i, Board::Field::P1, depth+1);
+            int newVal = minimax(moves + i, Board::Field::P1, alpha, beta ,depth+1);
             optimalVal = optimalVal < newVal ? optimalVal : newVal; // min(optimalVal,newVal)
+            beta = beta < optimalVal ? beta : optimalVal;
+
+            if(alpha >= beta) break;
 
         }
 
-    }
+        delete[] moves;
+        return optimalVal + depth;
 
-    delete[] moves;
-    return optimalVal;
+    }
 
 }
 
 Board::Field solve::solve(Board *board, int activePlayer) {
 
     auto turn = (Board::Field) activePlayer;
-    Board::Field state = board->isFinalState();
-
 
     while(board->isFinalState() == Board::Field::EMPTY && !board->isFull()){
 
@@ -125,6 +134,5 @@ Board::Field solve::solve(Board *board, int activePlayer) {
     }
 
     return board->isFinalState();
-
 
 }

@@ -7,30 +7,13 @@
 
 void handleInput();
 void commandGenAllPosMov(bool cut = false);
+void commandSolveGameState();
 
 void printAllPossibleMoves(Board* board, int activePlayer, bool withCut = false);
 
 int main() {
 
-    int testBoard[] = {
-            1,0,0,
-            0,0,0,
-            0,0,0
-    };
-
-    Board board(3,3,3, testBoard);
-//
-//    bool v = board.isFinalState();
-//
-//    printAllPossibleMoves(&board,1,true);
-
-//    handleInput();
-
-
-    auto state = solve::solve(&board,2);
-
-
-
+    handleInput();
 
     return 0;
 }
@@ -77,6 +60,7 @@ void printAllPossibleMoves(Board* board, int activePlayer, bool withCut){
 void handleInput(){
 
     char command[MAX_STRLEN];
+    int counter = 0;
 
     while(scanf("%s",command) == 1){
 
@@ -88,9 +72,13 @@ void handleInput(){
 
             commandGenAllPosMov(true);
 
+        } else if(strcmp(command,"SOLVE_GAME_STATE") == 0){
+
+            commandSolveGameState();
+
         }
 
-
+        counter++;
 
     }
 
@@ -114,6 +102,41 @@ void commandGenAllPosMov(bool cut){
 
 
     printAllPossibleMoves(&board,active, cut);
+
+}
+
+void commandSolveGameState(){
+
+    int N, M, K, active;
+    scanf("%d %d %d %d", &N, &M, &K, &active);
+
+    int* state = new int[N * M];
+
+    for(int i = 0; i < N * M; i++){
+
+        scanf("%d", state + i);
+
+    }
+
+    Board board(N,M,K,state);
+    delete[] state;
+
+
+    auto solution = solve::solve(&board,active);
+
+    switch(solution){
+
+        case Board::Field::EMPTY:
+            printf("BOTH_PLAYERS_TIE\n");
+            return;
+        case Board::Field::P1:
+            printf("FIRST_PLAYER_WINS\n");
+            return;
+        case Board::Field::P2:
+            printf("SECOND_PLAYER_WINS\n");
+            return;
+
+    }
 
 
 }
