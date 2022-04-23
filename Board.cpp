@@ -107,7 +107,7 @@ void Board::genPossibleMoves(Board *&moves, int& count, Field active) {
     count = 0;
     moves = new Board[N*M];
 
-    if(isFinalState()){
+    if(isFinalState() != EMPTY){
 
         return;
 
@@ -143,7 +143,7 @@ Board::~Board() {
 
 }
 
-bool Board::isFinalState() {
+Board::Field Board::isFinalState() {
     for(int y = 0; y < N; y++){
 
         for(int x = 0; x < M; x++){
@@ -160,7 +160,7 @@ bool Board::isFinalState() {
 
                 if(isWin){
 
-                    return true;
+                    return fState;
 
                 }
             }
@@ -169,7 +169,7 @@ bool Board::isFinalState() {
 
     }
 
-    return false;
+    return EMPTY;
 }
 
 bool Board::checkInDirection(int y0, int x0, int dy, int dx, Field field) {
@@ -190,6 +190,30 @@ bool Board::checkInDirection(int y0, int x0, int dy, int dx, Field field) {
     }
 
     return counter == K;
+
+}
+
+int Board::getN() const {
+    return N;
+}
+
+int Board::getM() const {
+    return M;
+}
+
+bool Board::isFull() {
+
+    for(int i = 0; i < N * M; i++){
+
+        if(state[i] == Field::EMPTY){
+
+            return false;
+
+        }
+
+    }
+
+    return true;
 
 }
 

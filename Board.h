@@ -26,12 +26,17 @@ public:
     Field& getFieldState(int y, int x);
 
     void genPossibleMoves(Board *&moves, int& count, Field active);
-    bool isFinalState();
+
+    Field isFinalState(); // EMPTY == NO!
+    bool isFull();
 
     void printState();
 
+    int getN() const;
+    int getM() const;
+
     ~Board();
-    bool checkInDirection(int y0, int x0, int dy, int dx, Field field);
+
 
 private:
 
@@ -41,8 +46,7 @@ private:
     int M; //width
     int K; //winning condition
 
-
-
+    bool checkInDirection(int y0, int x0, int dy, int dx, Field field); //check fields in the direction of {dy,dx}
 
 };
 

@@ -1,6 +1,7 @@
-#include "Board.h"
-
 #include <string.h>
+
+#include "Board.h"
+#include "solve.h"
 
 #define MAX_STRLEN 256
 
@@ -11,19 +12,24 @@ void printAllPossibleMoves(Board* board, int activePlayer, bool withCut = false)
 
 int main() {
 
-//    int testBoard[] = {
-//            0,2,1,
-//            2,2,1,
-//            0,1,0
-//    };
-//
-//    Board board(3,3,3, testBoard);
+    int testBoard[] = {
+            1,0,0,
+            0,0,0,
+            0,0,0
+    };
+
+    Board board(3,3,3, testBoard);
 //
 //    bool v = board.isFinalState();
 //
 //    printAllPossibleMoves(&board,1,true);
 
-    handleInput();
+//    handleInput();
+
+
+    auto state = solve::solve(&board,2);
+
+
 
 
     return 0;
