@@ -1,3 +1,4 @@
+#include <random>
 #include "solve.h"
 
 
@@ -97,9 +98,6 @@ int solve::minimax(Board *board, Board::Field activePlayer, int alpha, int beta,
 
         }
 
-        delete[] moves;
-        return optimalVal - depth;
-
     } else {
 
         optimalVal = INT_MAX;
@@ -114,10 +112,48 @@ int solve::minimax(Board *board, Board::Field activePlayer, int alpha, int beta,
 
         }
 
-        delete[] moves;
-        return optimalVal + depth;
+    }
+
+    delete[] moves;
+    return optimalVal + depth;
+
+}
+
+unsigned long solve::hash(Board *board) {
+
+    unsigned long hash = 0;
+
+    for(int y = 0; y < board->getN(); y++){
+
+        for(int x = 0; x < board->getM(); x++){
+
+            if(board->getFieldState(y,x) != Board::Field::EMPTY){
+
+                hash ^= randTable(board,y,x);
+
+            }
+        }
+    }
+
+    return hash;
+
+}
+
+long solve::randTable(Board* board,int y, int x, bool first){
+
+    static long* table = new long[board->getN() * board->getM() * 2];
+
+    if(first){
+
+        for(int i = 0; i < board->getM() * board->getN() * 2; i++){
+
+            table[i] = random();
+
+        }
 
     }
+
+    return table[x + y * board->getM() + ((long)board->getFieldState(y,x)-1)*2];
 
 }
 

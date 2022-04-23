@@ -5,6 +5,9 @@
 
 #define MAX_STRLEN 256
 
+FILE* file;
+
+
 void handleInput();
 void commandGenAllPosMov(bool cut = false);
 void commandSolveGameState();
@@ -13,7 +16,13 @@ void printAllPossibleMoves(Board* board, int activePlayer, bool withCut = false)
 
 int main() {
 
+    file = fopen("../tests/input.in","r");
+//    file = stdout;
+
+
     handleInput();
+
+//    fclose(file);
 
     return 0;
 }
@@ -62,7 +71,7 @@ void handleInput(){
     char command[MAX_STRLEN];
     int counter = 0;
 
-    while(scanf("%s",command) == 1){
+    while(fscanf(file,"%s",command) == 1){
 
         if(strcmp(command,"GEN_ALL_POS_MOV") == 0){
 
@@ -87,13 +96,13 @@ void handleInput(){
 void commandGenAllPosMov(bool cut){
 
     int N, M, K, active;
-    scanf("%d %d %d %d", &N, &M, &K, &active);
+    fscanf(file,"%d %d %d %d", &N, &M, &K, &active);
 
     int* state = new int[N * M];
 
     for(int i = 0; i < N * M; i++){
 
-        scanf("%d", state + i);
+        fscanf(file,"%d", state + i);
 
     }
 
@@ -108,13 +117,13 @@ void commandGenAllPosMov(bool cut){
 void commandSolveGameState(){
 
     int N, M, K, active;
-    scanf("%d %d %d %d", &N, &M, &K, &active);
+    fscanf(file,"%d %d %d %d", &N, &M, &K, &active);
 
     int* state = new int[N * M];
 
     for(int i = 0; i < N * M; i++){
 
-        scanf("%d", state + i);
+        fscanf(file,"%d", state + i);
 
     }
 
