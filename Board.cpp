@@ -34,7 +34,7 @@ Board::Board(int N, int M, int K, int* arr): N(N), M(M),K(K) {
 
 }
 
-Board::Board(const Board &other): N(other.N), M(other.M), K(other.K) {
+Board::Board(const Board &other): N(other.N), M(other.M), K(other.K), htable(other.htable) {
 
     state = new Field[N*M];
 
@@ -51,6 +51,8 @@ Board &Board::operator=(const Board &other) {
     N = other.N;
     M = other.M;
     K = other.K;
+
+    htable = other.htable;
 
     delete[] state;
     state = new Field[N*M];
@@ -214,6 +216,24 @@ bool Board::isFull() {
     }
 
     return true;
+
+}
+
+void Board::addHashTable(HashTable *hashTable) {
+
+    this->htable = hashTable;
+
+}
+
+void Board::removeHashTable() {
+
+    this->htable = nullptr;
+
+}
+
+HashTable *Board::getHashTable() {
+
+    return htable;
 
 }
 

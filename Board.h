@@ -1,6 +1,7 @@
 #pragma once
 
 #include <cstdio>
+#include "HashTable.h"
 
 class Board {
 
@@ -35,6 +36,10 @@ public:
     int getN() const;
     int getM() const;
 
+    void addHashTable(HashTable* hashTable);
+    void removeHashTable();
+    HashTable* getHashTable();
+
     ~Board();
 
 
@@ -42,6 +47,9 @@ private:
 
 
     Field* state;
+    HashTable* htable = nullptr;
+
+
     int N; //height
     int M; //width
     int K; //winning condition

@@ -23,7 +23,7 @@
 namespace solve {
 
 
-    unsigned long hash(Board* board);
+    unsigned long hash(Board* board, int size);
     long randTable(Board* board,int y, int x, bool first = false, bool last = false);
 
     Board bestMove(Board* board, Board::Field activePlayer);

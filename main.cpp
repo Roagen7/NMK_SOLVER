@@ -1,8 +1,12 @@
 #include <string.h>
+#include <cstdlib>
+#include <time.h>
+
 
 #include "Board.h"
 #include "solve.h"
 #include "HashTable.h"
+
 
 #define MAX_STRLEN 256
 
@@ -11,13 +15,15 @@ FILE* file;
 
 void handleInput();
 void commandGenAllPosMov(bool cut = false);
-void commandSolveGameState();
+void commandSolveGameState(HashTable* htable);
 
 void printAllPossibleMoves(Board* board, int activePlayer, bool withCut = false);
 
 int main() {
 
-    file = fopen("../tests/input.in","r");
+    file = fopen("../tests/20.in","r");
+    srand(time(nullptr));
+
 //    file = stdout;
 
     handleInput();
@@ -92,7 +98,7 @@ void handleInput(){
 
         } else if(strcmp(command,"SOLVE_GAME_STATE") == 0){
 
-            commandSolveGameState();
+            commandSolveGameState(nullptr);
 
         }
 
@@ -123,7 +129,7 @@ void commandGenAllPosMov(bool cut){
 
 }
 
-void commandSolveGameState(){
+void commandSolveGameState(HashTable* htable){
 
     int N, M, K, active;
     fscanf(file,"%d %d %d %d", &N, &M, &K, &active);
@@ -139,6 +145,7 @@ void commandSolveGameState(){
     Board board(N,M,K,state);
     delete[] state;
 
+    board.addHashTable(htable);
 
     auto solution = solve::solve(&board,active);
 

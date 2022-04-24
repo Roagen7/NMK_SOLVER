@@ -75,6 +75,20 @@ int solve::eval(Board *board) {
 
 int solve::minimax(Board *board, Board::Field activePlayer, int alpha, int beta, int depth) {
 
+    auto* htable = board->getHashTable();
+
+
+    if(htable != nullptr){
+
+
+        unsigned long hashVal = solve::hash(board,htable->getSize());
+        if(htable->isSet(hashVal)){
+
+            return htable->get(hashVal);
+
+        }
+    }
+
     Board* moves = nullptr;
     int numOfMoves, optimalVal;
 
@@ -98,6 +112,14 @@ int solve::minimax(Board *board, Board::Field activePlayer, int alpha, int beta,
         }
 
         delete[] moves;
+
+        if(htable != nullptr){
+
+            unsigned long hashVal = solve::hash(board,htable->getSize());
+            board->getHashTable()->set(hashVal,optimalVal-depth);
+
+        }
+
         return optimalVal - depth;
 
     } else {
@@ -115,17 +137,22 @@ int solve::minimax(Board *board, Board::Field activePlayer, int alpha, int beta,
         }
 
         delete[] moves;
+
+        if(htable != nullptr){
+
+            unsigned long hashVal = solve::hash(board,htable->getSize());
+            board->getHashTable()->set(hashVal,optimalVal+depth);
+
+        }
+
         return optimalVal + depth;
 
 
     }
 
-    delete[] moves;
-    return optimalVal;
-
 }
 
-unsigned long solve::hash(Board *board) {
+unsigned long solve::hash(Board *board, int size) {
 
     unsigned long hash = 0;
 
@@ -141,7 +168,7 @@ unsigned long solve::hash(Board *board) {
         }
     }
 
-    return hash % (int) pow(3,board->getN() * board->getM());
+    return hash % size;
 
 }
 
@@ -174,6 +201,13 @@ long solve::randTable(Board* board,int y, int x, bool first, bool last){
 
 
 Board::Field solve::solve(Board *board, int activePlayer) {
+
+
+    if(board->getHashTable() != nullptr && board->getHashTable()->isEmpty()){
+
+        randTable(board,0,0,true);
+
+    }
 
     auto turn = (Board::Field) activePlayer;
 

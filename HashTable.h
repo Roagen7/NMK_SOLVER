@@ -2,7 +2,7 @@
 
 #include <cstdlib>
 
-#define HTABLE_SIZE 100003
+#define HTABLE_SIZE 200003
 
 class HashTable {
 
