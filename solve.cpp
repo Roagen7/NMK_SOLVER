@@ -135,13 +135,19 @@ int solve::minimax(Board *board, Board::Field activePlayer, int alpha, int beta,
 
         }
 
+        delete[] moves;
 
+        if(htable != nullptr){
+
+            unsigned long hashVal = solve::hash(board,htable->getSize());
+            board->getHashTable()->set(hashVal,optimalVal,board);
+
+        }
+
+        return optimalVal;
 
 
     }
-
-
-
 
 }
 
