@@ -2,6 +2,7 @@
 
 #include "Board.h"
 #include "solve.h"
+#include "HashTable.h"
 
 #define MAX_STRLEN 256
 
@@ -19,10 +20,21 @@ int main() {
     file = fopen("../tests/input.in","r");
 //    file = stdout;
 
-
     handleInput();
+    fclose(file);
 
-//    fclose(file);
+//
+//    int a[] = {1, 2, 0,
+//               0, 0, 0,
+//               0, 0, 0};
+//
+//    Board board(3,3,3,a);
+//
+//    solve::randTable(&board,0,0,true);
+//    unsigned long h = solve::hash(&board);
+
+
+
 
     return 0;
 }
@@ -50,7 +62,6 @@ void printAllPossibleMoves(Board* board, int activePlayer, bool withCut){
 
     }
 
-
     printf("%d\n",num);
 
     for(int i = 0; i < num; i++){
@@ -61,15 +72,13 @@ void printAllPossibleMoves(Board* board, int activePlayer, bool withCut){
 
     delete[] moves;
 
-
 }
-
-
 
 void handleInput(){
 
     char command[MAX_STRLEN];
     int counter = 0;
+    HashTable htable;
 
     while(fscanf(file,"%s",command) == 1){
 
@@ -146,7 +155,6 @@ void commandSolveGameState(){
             return;
 
     }
-
 
 }
 
