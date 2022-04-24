@@ -36,5 +36,8 @@ namespace solve {
 
 
     Board::Field solve(Board* board, int activePlayer); // solve the game
+    Board::Field simulate(Board* board, int activePlayer); // play the game (debug)
+
+
 
 }

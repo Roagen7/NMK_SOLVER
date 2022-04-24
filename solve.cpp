@@ -96,6 +96,8 @@ int solve::minimax(Board *board, Board::Field activePlayer, int alpha, int beta,
 
     board->genPossibleMoves(moves,numOfMoves,activePlayer);
 
+    bool prunning = false;
+
     if(activePlayer == Board::Field::P1){
 
         optimalVal = INT_MIN;
@@ -106,20 +108,12 @@ int solve::minimax(Board *board, Board::Field activePlayer, int alpha, int beta,
             optimalVal = optimalVal > newVal ? optimalVal : newVal; // max(optimalVal, newVal)
             alpha = alpha > optimalVal ? alpha : optimalVal;
 
-//            if(alpha >= beta) break;
+            if(alpha >= beta) {
+                prunning = true;
+                break;
+            }
 
         }
-
-        delete[] moves;
-
-        if(htable != nullptr){
-
-            unsigned long hashVal = solve::hash(board,htable->getSize());
-            board->getHashTable()->set(hashVal,optimalVal,board);
-
-        }
-
-        return optimalVal;
 
     } else {
 
@@ -131,23 +125,34 @@ int solve::minimax(Board *board, Board::Field activePlayer, int alpha, int beta,
             optimalVal = optimalVal < newVal ? optimalVal : newVal; // min(optimalVal,newVal)
             beta = beta < optimalVal ? beta : optimalVal;
 
-//            if(alpha >= beta) break;
+            if(alpha >= beta) {
+                prunning = true;
+                break;
+            }
 
         }
+    }
 
-        delete[] moves;
+    delete[] moves;
 
-        if(htable != nullptr){
+    if(activePlayer == Board::P1){
 
-            unsigned long hashVal = solve::hash(board,htable->getSize());
-            board->getHashTable()->set(hashVal,optimalVal,board);
+        optimalVal -= depth;
 
-        }
+    } else {
 
-        return optimalVal;
-
+        optimalVal += depth;
 
     }
+
+    if(htable != nullptr && !prunning){
+
+        unsigned long hashVal = solve::hash(board,htable->getSize());
+        board->getHashTable()->set(hashVal,optimalVal,board);
+
+    }
+
+    return optimalVal;
 
 }
 
@@ -200,6 +205,45 @@ long solve::randTable(Board* board,int y, int x, bool first, bool last){
 
 
 Board::Field solve::solve(Board *board, int activePlayer) {
+
+
+    if(board->getHashTable() != nullptr && board->getHashTable()->isEmpty()){
+
+        randTable(board,0,0,true);
+
+    }
+
+    auto turn = (Board::Field) activePlayer;
+
+    int mx = minimax(board,turn,INT_MIN,INT_MAX);
+
+    if(mx > 0){
+
+        return Board::P1;
+
+    }
+
+    if(mx < 0){
+
+        return Board::P2;
+
+    }
+
+    return Board::EMPTY;
+
+//    while(board->isFinalState() == Board::Field::EMPTY && !board->isFull()){
+//
+//        Board m = bestMove(board,turn);
+//        *board = m;
+//        turn = turn == Board::Field::P1 ? Board::Field::P2 : Board::Field::P1;
+//
+//    }
+//
+//    return board->isFinalState();
+
+}
+
+Board::Field solve::simulate(Board *board, int activePlayer) {
 
 
     if(board->getHashTable() != nullptr && board->getHashTable()->isEmpty()){

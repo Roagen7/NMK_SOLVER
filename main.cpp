@@ -21,7 +21,7 @@ void printAllPossibleMoves(Board* board, int activePlayer, bool withCut = false)
 
 int main() {
 
-    file = fopen("../tests/custom.in","r");
+    file = fopen("../tests/20.in","r");
     srand(time(nullptr));
 
 //    file = stdout;
@@ -71,6 +71,8 @@ void printAllPossibleMoves(Board* board, int activePlayer, bool withCut){
             if(moves[i].isFinalState()){
                 printf("1\n");
                 moves[i].printState();
+
+                delete[] moves;
                 return;
 
             }
