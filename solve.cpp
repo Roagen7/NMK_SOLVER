@@ -104,14 +104,19 @@ int solve::minimax(Board *board, Board::Field activePlayer, int alpha, int beta,
 
         for(int i = 0; i < numOfMoves; i++){
 
+//            alpha = depth == 0 ? INT_MIN : alpha;
+
             int newVal = minimax(moves + i,Board::Field::P2, alpha, beta, depth+1);
             optimalVal = optimalVal > newVal ? optimalVal : newVal; // max(optimalVal, newVal)
             alpha = alpha > optimalVal ? alpha : optimalVal;
 
-            if(alpha >= beta) {
-                prunning = true;
-                break;
-            }
+            if(abs(optimalVal - EVAL_MAX) <= board->getM() * board->getN())  break;
+
+//
+//            if(alpha >= beta) {
+//                prunning = true;
+//                break;
+//            }
 
         }
 
@@ -121,14 +126,19 @@ int solve::minimax(Board *board, Board::Field activePlayer, int alpha, int beta,
 
         for(int i = 0; i < numOfMoves; i++){
 
+//            beta = depth == 0 ? INT_MAX : beta;
+
             int newVal = minimax(moves + i, Board::Field::P1, alpha, beta ,depth+1);
             optimalVal = optimalVal < newVal ? optimalVal : newVal; // min(optimalVal,newVal)
             beta = beta < optimalVal ? beta : optimalVal;
 
-            if(alpha >= beta) {
-                prunning = true;
-                break;
-            }
+            if(abs(optimalVal - EVAL_MIN) <= board->getM() * board->getN()) break;
+
+//
+//            if(alpha >= beta) {
+//                prunning = true;
+//                break;
+//            }
 
         }
     }
@@ -216,30 +226,22 @@ Board::Field solve::solve(Board *board, int activePlayer) {
     auto turn = (Board::Field) activePlayer;
 
     int mx = minimax(board,turn,INT_MIN,INT_MAX);
+    int maxDepth = board->getN() * board->getM();
 
-    if(mx > 0){
+
+    if(abs(EVAL_MAX - mx) <= maxDepth){
 
         return Board::P1;
 
     }
 
-    if(mx < 0){
+    if(abs(EVAL_MIN - mx) <= maxDepth){
 
         return Board::P2;
 
     }
 
     return Board::EMPTY;
-
-//    while(board->isFinalState() == Board::Field::EMPTY && !board->isFull()){
-//
-//        Board m = bestMove(board,turn);
-//        *board = m;
-//        turn = turn == Board::Field::P1 ? Board::Field::P2 : Board::Field::P1;
-//
-//    }
-//
-//    return board->isFinalState();
 
 }
 

@@ -112,7 +112,7 @@ void handleInput(){
         } else if(strcmp(command,"SOLVE_GAME_STATE") == 0){
 
             counter++;
-            if(counter == 2){
+            if(counter == 17){
 
 
                 int x = 0;
