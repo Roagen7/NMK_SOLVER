@@ -2,6 +2,8 @@
 
 #include <cstdlib>
 
+#include "List.h"
+
 #define HTABLE_SIZE 200003
 
 class HashTable {
@@ -9,18 +11,22 @@ class HashTable {
 public:
 
     HashTable();
+    ~HashTable();
 
-    void set(unsigned long hash, int val);
-    int get(unsigned long hash) const;
+    void set(unsigned long hash, int val, Board* board);
+    int get(unsigned long hash, Board* board) const;
 
-    bool isSet(unsigned long hash) const;
+    bool isSet(unsigned long hash, Board* board) const;
     bool isEmpty() const;
     int getSize() const;
 
 private:
 
     bool* dataIsSet;
-    int* dataVals;
+
+    List* dataVals;
+
+
     int size = HTABLE_SIZE;
 
     bool empty = true;

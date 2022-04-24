@@ -80,11 +80,10 @@ int solve::minimax(Board *board, Board::Field activePlayer, int alpha, int beta,
 
     if(htable != nullptr){
 
-
         unsigned long hashVal = solve::hash(board,htable->getSize());
-        if(htable->isSet(hashVal)){
+        if(htable->isSet(hashVal,board)){
 
-            return htable->get(hashVal);
+            return htable->get(hashVal,board);
 
         }
     }
@@ -107,7 +106,7 @@ int solve::minimax(Board *board, Board::Field activePlayer, int alpha, int beta,
             optimalVal = optimalVal > newVal ? optimalVal : newVal; // max(optimalVal, newVal)
             alpha = alpha > optimalVal ? alpha : optimalVal;
 
-            if(alpha >= beta) break;
+//            if(alpha >= beta) break;
 
         }
 
@@ -116,11 +115,11 @@ int solve::minimax(Board *board, Board::Field activePlayer, int alpha, int beta,
         if(htable != nullptr){
 
             unsigned long hashVal = solve::hash(board,htable->getSize());
-            board->getHashTable()->set(hashVal,optimalVal-depth);
+            board->getHashTable()->set(hashVal,optimalVal,board);
 
         }
 
-        return optimalVal - depth;
+        return optimalVal;
 
     } else {
 
@@ -132,23 +131,17 @@ int solve::minimax(Board *board, Board::Field activePlayer, int alpha, int beta,
             optimalVal = optimalVal < newVal ? optimalVal : newVal; // min(optimalVal,newVal)
             beta = beta < optimalVal ? beta : optimalVal;
 
-            if(alpha >= beta) break;
+//            if(alpha >= beta) break;
 
         }
 
-        delete[] moves;
 
-        if(htable != nullptr){
-
-            unsigned long hashVal = solve::hash(board,htable->getSize());
-            board->getHashTable()->set(hashVal,optimalVal+depth);
-
-        }
-
-        return optimalVal + depth;
 
 
     }
+
+
+
 
 }
 

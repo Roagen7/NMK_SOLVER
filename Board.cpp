@@ -237,6 +237,20 @@ HashTable *Board::getHashTable() {
 
 }
 
+bool operator==(const Board &b1, const Board &b2) {
+
+    if(b1.getM() != b2.getM() || b1.getN() != b2.getN()) return false;
+
+    for(int i = 0; i < b1.getM() * b1.getN(); i++){
+
+        if(b1.state[i] != b2.state[i]) return false;
+
+    }
+
+    return true;
+
+}
+
 
 
 

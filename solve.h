@@ -14,6 +14,7 @@
 #include <cmath>
 
 #include "Board.h"
+#include "HashTable.h"
 
 #define EVAL_MIN -10000 //P2 WINS
 #define EVAL_MAX 10000 //P1 WINS

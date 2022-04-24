@@ -1,7 +1,8 @@
 #pragma once
 
 #include <cstdio>
-#include "HashTable.h"
+
+class HashTable;
 
 class Board {
 
@@ -21,6 +22,8 @@ public:
     Board(const Board& other); //copy
 
     Board& operator=(const Board& other);
+
+    friend bool operator==(const Board& b1, const Board& b2);
 
     void setFieldState(int y, int x, Field field);
     void clearFieldState(int y, int x);

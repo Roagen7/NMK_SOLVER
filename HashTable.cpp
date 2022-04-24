@@ -3,8 +3,9 @@
 
 HashTable::HashTable() {
 
-    dataVals = new int[size];
+    dataVals = new List[size];
     dataIsSet = new bool[size];
+
 
     for(int i = 0; i < size; i++){
 
@@ -14,21 +15,42 @@ HashTable::HashTable() {
 
 }
 
-void HashTable::set(unsigned long hash, int val) {
+void HashTable::set(unsigned long hash, int val, Board* board) {
 
     empty = false;
-
     dataIsSet[hash] = true;
-    dataVals[hash] = val;
+    dataVals[hash].Push({*board,val});
 
 }
 
-int HashTable::get(unsigned long hash) const {
-    return dataVals[hash];
+int HashTable::get(unsigned long hash, Board* board) const {
+
+    List& dvs = dataVals[hash];
+
+    for(int i = 0; i < dvs.len(); i++){
+
+        if(dvs[i].board == *board) return dvs[i].minmax;
+
+    }
+
+    return 0;
+
 }
 
-bool HashTable::isSet(unsigned long hash) const {
-    return dataIsSet[hash];
+bool HashTable::isSet(unsigned long hash, Board* board) const {
+
+    if(!dataIsSet[hash]) return false;
+
+    List& dvs = dataVals[hash];
+
+    for(int i = 0; i < dvs.len(); i++){
+
+        if(dvs[i].board == *board) return true;
+
+    }
+
+    return false;
+
 }
 
 int HashTable::getSize() const {
@@ -37,4 +59,11 @@ int HashTable::getSize() const {
 
 bool HashTable::isEmpty() const {
     return empty;
+}
+
+HashTable::~HashTable() {
+
+    delete[] dataVals;
+    delete[] dataIsSet;
+
 }

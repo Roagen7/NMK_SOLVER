@@ -21,7 +21,7 @@ void printAllPossibleMoves(Board* board, int activePlayer, bool withCut = false)
 
 int main() {
 
-    file = fopen("../tests/20.in","r");
+    file = fopen("../tests/custom.in","r");
     srand(time(nullptr));
 
 //    file = stdout;
@@ -34,7 +34,18 @@ int main() {
 //               0, 0, 0,
 //               0, 0, 0};
 //
+//
 //    Board board(3,3,3,a);
+//
+//    int b[] = {1, 2, 0,1,
+//                0, 1, 0,1,
+//                0, 0, 0,1};
+//
+//    Board board2(3,4,3,b);
+//
+//    bool z = (board == board2);
+
+
 //
 //    solve::randTable(&board,0,0,true);
 //    unsigned long h = solve::hash(&board);
@@ -98,11 +109,20 @@ void handleInput(){
 
         } else if(strcmp(command,"SOLVE_GAME_STATE") == 0){
 
-            commandSolveGameState(nullptr);
+            counter++;
+            if(counter == 2){
+
+
+                int x = 0;
+
+
+            }
+
+            commandSolveGameState(&htable);
 
         }
 
-        counter++;
+
 
     }
 
