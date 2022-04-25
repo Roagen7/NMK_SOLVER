@@ -21,21 +21,24 @@ void printAllPossibleMoves(Board* board, int activePlayer, bool withCut = false)
 
 int main() {
 
-    file = fopen("../tests/20.in","r");
+    file = fopen("../tests/custom.in","r");
     srand(time(nullptr));
 
-//    file = stdout;
 
     handleInput();
     fclose(file);
 
+
+//    int a[] = {0, 0, 0,0,
+//            0, 1, 1,0,
+//            0, 2, 0, 0,
+//            0,0,0,2};
 //
-//    int a[] = {1, 2, 0,
-//               0, 0, 0,
-//               0, 0, 0};
-//
-//
-//    Board board(3,3,3,a);
+////
+//    Board board(4,4,3,a);
+////
+//    auto v = board.isDangerousState(Board::P1,false);
+
 //
 //    int b[] = {1, 2, 0,1,
 //                0, 1, 0,1,
@@ -112,7 +115,7 @@ void handleInput(){
         } else if(strcmp(command,"SOLVE_GAME_STATE") == 0){
 
             counter++;
-            if(counter == 17){
+            if(counter == 7){
 
 
                 int x = 0;

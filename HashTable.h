@@ -4,7 +4,7 @@
 
 #include "List.h"
 
-#define HTABLE_SIZE 200003
+#define HTABLE_SIZE 5003
 
 class HashTable {
 

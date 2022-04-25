@@ -75,6 +75,7 @@ int solve::eval(Board *board) {
 
 int solve::minimax(Board *board, Board::Field activePlayer, int alpha, int beta, int depth) {
 
+
     auto* htable = board->getHashTable();
 
 
@@ -94,6 +95,16 @@ int solve::minimax(Board *board, Board::Field activePlayer, int alpha, int beta,
     Board::Field state = board->isFinalState();
     if(state != Board::Field::EMPTY || board->isFull()) return eval(board);
 
+    if(board->isDangerousState(activePlayer,true))  return activePlayer == Board::Field::P1 ? EVAL_MAX - depth : EVAL_MIN + depth;
+
+    if(board->isDangerousState(activePlayer == Board::Field::P1 ? Board::Field::P2 : Board::Field::P1, false)){
+
+        return activePlayer == Board::Field::P1 ? EVAL_MIN : EVAL_MAX;
+
+    }
+
+
+
     board->genPossibleMoves(moves,numOfMoves,activePlayer);
 
     bool prunning = false;
@@ -104,19 +115,11 @@ int solve::minimax(Board *board, Board::Field activePlayer, int alpha, int beta,
 
         for(int i = 0; i < numOfMoves; i++){
 
-//            alpha = depth == 0 ? INT_MIN : alpha;
-
             int newVal = minimax(moves + i,Board::Field::P2, alpha, beta, depth+1);
             optimalVal = optimalVal > newVal ? optimalVal : newVal; // max(optimalVal, newVal)
             alpha = alpha > optimalVal ? alpha : optimalVal;
 
             if(abs(optimalVal - EVAL_MAX) <= board->getM() * board->getN())  break;
-
-//
-//            if(alpha >= beta) {
-//                prunning = true;
-//                break;
-//            }
 
         }
 
@@ -126,19 +129,12 @@ int solve::minimax(Board *board, Board::Field activePlayer, int alpha, int beta,
 
         for(int i = 0; i < numOfMoves; i++){
 
-//            beta = depth == 0 ? INT_MAX : beta;
 
             int newVal = minimax(moves + i, Board::Field::P1, alpha, beta ,depth+1);
             optimalVal = optimalVal < newVal ? optimalVal : newVal; // min(optimalVal,newVal)
             beta = beta < optimalVal ? beta : optimalVal;
 
             if(abs(optimalVal - EVAL_MIN) <= board->getM() * board->getN()) break;
-
-//
-//            if(alpha >= beta) {
-//                prunning = true;
-//                break;
-//            }
 
         }
     }

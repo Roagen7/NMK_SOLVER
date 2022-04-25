@@ -2,8 +2,8 @@
 // algorithm
 // https://www.geeksforgeeks.org/minimax-algorithm-in-game-theory-set-3-tic-tac-toe-ai-finding-optimal-move/
 // optimization
-// https://www.geeksforgeeks.org/minimax-algorithm-in-game-theory-set-4-alpha-beta-pruning/?ref=lbp
-// https://www.geeksforgeeks.org/minimax-algorithm-in-game-theory-set-5-zobrist-hashing/?ref=lbp
+// lecture - alpha-beta prunning
+// https://www.geeksforgeeks.org/minimax-algorithm-in-game-theory-set-5-zobrist-hashing/?ref=lbp - hash function
 
 //info
 //P1 - maximizer P2 - minimizer
@@ -32,12 +32,7 @@ namespace solve {
     int minimax(Board* board, Board::Field activePlayer, int alpha, int beta ,int depth = 0); // move evaluation
 
 
-
-
-
     Board::Field solve(Board* board, int activePlayer); // solve the game
     Board::Field simulate(Board* board, int activePlayer); // play the game (debug)
-
-
 
 }

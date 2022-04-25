@@ -155,10 +155,10 @@ Board::Field Board::isFinalState() {
             if(fState == Field::P1 || fState == Field::P2){
 
                 bool isWin;
-                isWin = checkInDirection(y,x,1,0,fState);
-                isWin = isWin || checkInDirection(y,x,0,1,fState);
-                isWin = isWin || checkInDirection(y,x,1,1,fState);
-                isWin = isWin || checkInDirection(y,x,1,-1,fState);
+                isWin = checkInDirection(y, x, 1, 0, fState, K );
+                isWin = isWin || checkInDirection(y, x, 0, 1, fState, K );
+                isWin = isWin || checkInDirection(y, x, 1, 1, fState, K );
+                isWin = isWin || checkInDirection(y, x, 1, -1, fState, K);
 
                 if(isWin){
 
@@ -174,12 +174,20 @@ Board::Field Board::isFinalState() {
     return EMPTY;
 }
 
-bool Board::checkInDirection(int y0, int x0, int dy, int dx, Field field) {
+bool Board::checkInDirection(int y0, int x0, int dy, int dx, Field field, int k, bool omitFirst) {
 
     int yCurrent = y0;
     int xCurrent = x0;
 
     int counter = 0;
+
+    if(omitFirst){
+
+        yCurrent += dy;
+        xCurrent += dx;
+
+    }
+
 
     while(yCurrent >= 0 && xCurrent >= 0 &&
           yCurrent < N && xCurrent < M &&
@@ -188,6 +196,17 @@ bool Board::checkInDirection(int y0, int x0, int dy, int dx, Field field) {
         yCurrent += dy;
         xCurrent += dx;
         counter++;
+
+    }
+
+    bool inside = yCurrent >= 0 && xCurrent >= 0 &&
+                  yCurrent < N && xCurrent < M ;
+
+    bool dangerCheck = getFieldState(yCurrent, xCurrent) == Field::EMPTY && inside;
+
+    if(dangerCheck && k == K-1){
+
+        return counter == k;
 
     }
 
@@ -250,6 +269,43 @@ bool operator==(const Board &b1, const Board &b2) {
     return true;
 
 }
+
+bool Board::isDangerousState(Field toCheck, bool winning_move) {
+
+    for(int y = 0; y < N; y++){
+
+        for(int x = 0; x < M; x++){
+
+            auto fState = getFieldState(y,x);
+
+            if(fState == toCheck){
+
+                int states = 0;
+                for(int i = -1; i <= 1; i++){
+
+                    for(int j = -1; j <= 1; j++){
+
+                        if(!(i == 0 && j == 0)){
+
+                            if(checkInDirection(y, x, i, j, fState, K - 1)) states++;
+
+                        }
+
+                    }
+
+                }
+
+                if(states >= 2 || (states == 1 && winning_move)) return true;
+
+            }
+
+        }
+
+    }
+
+    return false;
+}
+
 
 
 
