@@ -28,34 +28,7 @@ int main() {
     handleInput();
     fclose(file);
 
-
-//    int a[] = {0, 0, 0,0,
-//            1, 0, 1,0,
-//            0, 2, 0, 0,
-//            0,0,0,2};
-////
-//////
-//    Board board(4,4,3,a);
-
-
-////
-//    auto v = board.isDangerousState(Board::P1,false);
-
-//
-//    int b[] = {1, 2, 0,1,
-//                0, 1, 0,1,
-//                0, 0, 0,1};
-//
-//    Board board2(3,4,3,b);
-//
-//    bool z = (board == board2);
-
-
-//
-//    solve::randTable(&board,0,0,true);
-//    unsigned long h = solve::hash(&board);
-
-
+    solve::randTable(nullptr,0,0,false,true);
 
 
     return 0;
@@ -117,7 +90,7 @@ void handleInput(){
         } else if(strcmp(command,"SOLVE_GAME_STATE") == 0){
 
             counter++;
-            if(counter == 7){
+            if(counter == 30596){
 
 
                 int x = 0;

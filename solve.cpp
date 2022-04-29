@@ -82,11 +82,9 @@ int solve::minimax(Board *board, Board::Field activePlayer, int alpha, int beta,
     if(htable != nullptr){
 
         unsigned long hashVal = solve::hash(board,htable->getSize());
-        if(htable->isSet(hashVal,board)){
 
-            return htable->get(hashVal,board);
+        if(htable->isSet(hashVal,board)) return htable->get(hashVal,board);
 
-        }
     }
 
     Board* moves = nullptr;
@@ -94,21 +92,16 @@ int solve::minimax(Board *board, Board::Field activePlayer, int alpha, int beta,
 
     Board::Field state = board->isFinalState();
 
+    if(state != Board::Field::EMPTY || board->isFull())
+        return eval(board);
 
+    if(board->isDangerousState(activePlayer,true))
+        return activePlayer == Board::Field::P1 ? EVAL_MAX - depth : EVAL_MIN + depth;
 
-    if(state != Board::Field::EMPTY || board->isFull()) return eval(board);
-
-    if(board->isDangerousState(activePlayer,true))  return activePlayer == Board::Field::P1 ? EVAL_MAX - depth : EVAL_MIN + depth;
-
-    if(board->isDangerousState(activePlayer == Board::Field::P1 ? Board::Field::P2 : Board::Field::P1, false)){
-
+    if(board->isDangerousState(activePlayer == Board::Field::P1 ? Board::Field::P2 : Board::Field::P1, false))
         return activePlayer == Board::Field::P1 ? EVAL_MIN + depth : EVAL_MAX - depth;
 
-    }
-
     board->genPossibleMoves(moves,numOfMoves,activePlayer);
-
-    bool prunning = false;
 
     if(activePlayer == Board::Field::P1){
 
@@ -118,7 +111,7 @@ int solve::minimax(Board *board, Board::Field activePlayer, int alpha, int beta,
 
             int newVal = minimax(moves + i,Board::Field::P2, alpha, beta, depth+1);
             optimalVal = optimalVal > newVal ? optimalVal : newVal; // max(optimalVal, newVal)
-            alpha = alpha > optimalVal ? alpha : optimalVal;
+//            alpha = alpha > optimalVal ? alpha : optimalVal;
 
             if(abs(optimalVal - EVAL_MAX) <= board->getM() * board->getN())  break;
 
@@ -133,7 +126,7 @@ int solve::minimax(Board *board, Board::Field activePlayer, int alpha, int beta,
 
             int newVal = minimax(moves + i, Board::Field::P1, alpha, beta ,depth+1);
             optimalVal = optimalVal < newVal ? optimalVal : newVal; // min(optimalVal,newVal)
-            beta = beta < optimalVal ? beta : optimalVal;
+//            beta = beta < optimalVal ? beta : optimalVal;
 
             if(abs(optimalVal - EVAL_MIN) <= board->getM() * board->getN()) break;
 
@@ -142,17 +135,9 @@ int solve::minimax(Board *board, Board::Field activePlayer, int alpha, int beta,
 
     delete[] moves;
 
-    if(activePlayer == Board::P1){
+    optimalVal = activePlayer == Board::P1 ? optimalVal - depth : optimalVal + depth;
 
-        optimalVal -= depth;
-
-    } else {
-
-        optimalVal += depth;
-
-    }
-
-    if(htable != nullptr && !prunning){
+    if(htable != nullptr){
 
         unsigned long hashVal = solve::hash(board,htable->getSize());
         board->getHashTable()->set(hashVal,optimalVal,board);
@@ -223,7 +208,7 @@ Board::Field solve::solve(Board *board, int activePlayer) {
     auto turn = (Board::Field) activePlayer;
 
     int mx = minimax(board,turn,INT_MIN,INT_MAX);
-    int maxDepth = board->getN() * board->getM();
+    int maxDepth = board->getN() * board->getM() * board->getK();
 
 
     if(abs(EVAL_MAX - mx) <= maxDepth){

@@ -188,7 +188,6 @@ bool Board::checkInDirection(int y0, int x0, int dy, int dx, Field field, int k,
 
     }
 
-
     while(yCurrent >= 0 && xCurrent >= 0 &&
           yCurrent < N && xCurrent < M &&
           getFieldState(yCurrent,xCurrent) == field){
@@ -199,33 +198,7 @@ bool Board::checkInDirection(int y0, int x0, int dy, int dx, Field field, int k,
 
     }
 
-
-    bool inside = yCurrent >= 0 && xCurrent >= 0 &&
-                  yCurrent < N && xCurrent < M ;
-
-    bool dangerCheck = inside && getFieldState(yCurrent, xCurrent) == Field::EMPTY ;
-
-    if(checkMiddle){
-
-        bool nextInside = yCurrent + dy >= 0 && xCurrent + dx >= 0 &&
-                          yCurrent + dy< N && xCurrent + dx < M ;
-
-        bool middleCheck = nextInside && getFieldState(yCurrent+ dy,xCurrent + dx) == field;
-
-        if(inside && dangerCheck && middleCheck){
-
-            return counter == K-2;
-
-
-        }
-
-    }
-
-    if(dangerCheck && k == K-1){
-
-        return counter == k;
-
-    }
+    if(dangerChecks(checkMiddle,yCurrent,xCurrent,dy,dx,field,counter,k)) return true;
 
     return counter == K;
 
@@ -316,7 +289,25 @@ bool Board::isDangerousState(Field toCheck, bool winning_move) {
 
                 if(states >= 2 || (states == 1 && winning_move)) return true;
 
+            } else if(fState == EMPTY){
+
+                for(int i = -1; i <= 1; i++){
+
+                    for(int j = -1; j <= 1; j++){
+
+                        if(!(i == 0 && j == 0)){
+
+                            if(checkInDirection(y, x, i, j, toCheck, K - 1, true)) return true;
+
+                        }
+
+                    }
+
+                }
+
             }
+
+
 
         }
 
@@ -324,6 +315,43 @@ bool Board::isDangerousState(Field toCheck, bool winning_move) {
 
     return false;
 }
+
+int Board::getK() const {
+    return K;
+}
+
+bool Board::dangerChecks(bool checkMiddle, int yCurrent, int xCurrent, int dy, int dx, Field field, int counter, int k) {
+
+    bool inside = yCurrent >= 0 && xCurrent >= 0 &&
+                  yCurrent < N && xCurrent < M ;
+
+    bool dangerCheck = inside && getFieldState(yCurrent, xCurrent) == Field::EMPTY ;
+
+    if(checkMiddle){
+
+        bool nextInside = yCurrent + dy >= 0 && xCurrent + dx >= 0 &&
+                          yCurrent + dy< N && xCurrent + dx < M ;
+
+        bool middleCheck = nextInside && getFieldState(yCurrent+ dy,xCurrent + dx) == field;
+
+        if(inside && dangerCheck && middleCheck){
+
+            return counter == K-2;
+
+
+        }
+
+    }
+
+    if(dangerCheck && k == K-1){
+
+        return counter == k;
+
+    }
+
+    return false;
+}
+
 
 
 

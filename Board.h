@@ -50,6 +50,8 @@ public:
     ~Board();
 
 
+    int getK() const;
+
 private:
 
 
@@ -62,6 +64,7 @@ private:
     int K; //winning condition
 
     bool checkInDirection(int y0, int x0, int dy, int dx, Field field, int k, bool omitFirst = false, bool checkMiddle = false); //check fields in the direction of {dy,dx}
+    bool dangerChecks(bool checkMiddle, int yCurrent, int xCurrent, int dy, int dx, Field field, int counter, int k);
 
 };
 
