@@ -10,8 +10,6 @@
 
 #define MAX_STRLEN 256
 
-FILE* file;
-
 
 void handleInput();
 void commandGenAllPosMov(bool cut = false);
@@ -21,15 +19,10 @@ void printAllPossibleMoves(Board* board, int activePlayer, bool withCut = false)
 
 int main() {
 
-    file = fopen("../tests/custom.in","r");
+
     srand(time(nullptr));
 
-
     handleInput();
-    fclose(file);
-
-    solve::randTable(nullptr,0,0,false,true);
-
 
     return 0;
 }
@@ -75,9 +68,12 @@ void handleInput(){
 
     char command[MAX_STRLEN];
     int counter = 0;
-    HashTable htable;
 
-    while(fscanf(file,"%s",command) == 1){
+#ifdef HTABLE
+    HashTable htable;
+#endif
+
+    while(scanf("%s",command) == 1){
 
         if(strcmp(command,"GEN_ALL_POS_MOV") == 0){
 
@@ -89,16 +85,11 @@ void handleInput(){
 
         } else if(strcmp(command,"SOLVE_GAME_STATE") == 0){
 
-            counter++;
-            if(counter == 30596){
-
-
-                int x = 0;
-
-
-            }
-
+#ifdef HTABLE
             commandSolveGameState(&htable);
+#else
+            commandSolveGameState(nullptr);
+#endif
 
         }
 
@@ -111,13 +102,13 @@ void handleInput(){
 void commandGenAllPosMov(bool cut){
 
     int N, M, K, active;
-    fscanf(file,"%d %d %d %d", &N, &M, &K, &active);
+    scanf("%d %d %d %d", &N, &M, &K, &active);
 
     int* state = new int[N * M];
 
     for(int i = 0; i < N * M; i++){
 
-        fscanf(file,"%d", state + i);
+        scanf("%d", state + i);
 
     }
 
@@ -132,13 +123,13 @@ void commandGenAllPosMov(bool cut){
 void commandSolveGameState(HashTable* htable){
 
     int N, M, K, active;
-    fscanf(file,"%d %d %d %d", &N, &M, &K, &active);
+    scanf("%d %d %d %d", &N, &M, &K, &active);
 
     int* state = new int[N * M];
 
     for(int i = 0; i < N * M; i++){
 
-        fscanf(file,"%d", state + i);
+        scanf("%d", state + i);
 
     }
 

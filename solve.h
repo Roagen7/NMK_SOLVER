@@ -3,7 +3,7 @@
 // https://www.geeksforgeeks.org/minimax-algorithm-in-game-theory-set-3-tic-tac-toe-ai-finding-optimal-move/
 // optimization
 // lecture - alpha-beta prunning
-// https://www.geeksforgeeks.org/minimax-algorithm-in-game-theory-set-5-zobrist-hashing/?ref=lbp - hash function
+// https://www.geeksforgeeks.org/minimax-algorithm-in-game-theory-set-5-zobrist-hashing/?ref=lbp - hash function for hashtable
 
 //info
 //P1 - maximizer P2 - minimizer
@@ -30,6 +30,12 @@ namespace solve {
     Board bestMove(Board* board, Board::Field activePlayer);
     int eval(Board* board); // board evaluation
     int minimax(Board* board, Board::Field activePlayer, int alpha, int beta ,int depth = 0); // move evaluation
+
+    int maximizer(Board* board, Board* moves, int numOfMoves, int alpha, int beta, int depth); // optimal val for maximizer
+    int minimizer(Board* board, Board* moves, int numOfMoves, int alpha, int beta, int depth); // optimal val for minimizer
+
+    bool cutState(Board* board, Board::Field activePlayer,int depth,int& optimalVal);
+
 
 
     Board::Field solve(Board* board, int activePlayer); // solve the game

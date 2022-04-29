@@ -34,8 +34,6 @@ public:
     Field isFinalState(); // EMPTY == NO!
     bool isDangerousState(Field toCheck, bool winning_move);
 
-
-
     bool isFull();
 
     void printState();
