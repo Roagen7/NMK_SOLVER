@@ -93,17 +93,18 @@ int solve::minimax(Board *board, Board::Field activePlayer, int alpha, int beta,
     int numOfMoves, optimalVal;
 
     Board::Field state = board->isFinalState();
+
+
+
     if(state != Board::Field::EMPTY || board->isFull()) return eval(board);
 
     if(board->isDangerousState(activePlayer,true))  return activePlayer == Board::Field::P1 ? EVAL_MAX - depth : EVAL_MIN + depth;
 
     if(board->isDangerousState(activePlayer == Board::Field::P1 ? Board::Field::P2 : Board::Field::P1, false)){
 
-        return activePlayer == Board::Field::P1 ? EVAL_MIN : EVAL_MAX;
+        return activePlayer == Board::Field::P1 ? EVAL_MIN + depth : EVAL_MAX - depth;
 
     }
-
-
 
     board->genPossibleMoves(moves,numOfMoves,activePlayer);
 

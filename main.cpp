@@ -30,12 +30,14 @@ int main() {
 
 
 //    int a[] = {0, 0, 0,0,
-//            0, 1, 1,0,
+//            1, 0, 1,0,
 //            0, 2, 0, 0,
 //            0,0,0,2};
-//
 ////
+//////
 //    Board board(4,4,3,a);
+
+
 ////
 //    auto v = board.isDangerousState(Board::P1,false);
 

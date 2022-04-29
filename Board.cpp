@@ -174,7 +174,7 @@ Board::Field Board::isFinalState() {
     return EMPTY;
 }
 
-bool Board::checkInDirection(int y0, int x0, int dy, int dx, Field field, int k, bool omitFirst) {
+bool Board::checkInDirection(int y0, int x0, int dy, int dx, Field field, int k, bool omitFirst, bool checkMiddle) {
 
     int yCurrent = y0;
     int xCurrent = x0;
@@ -199,10 +199,27 @@ bool Board::checkInDirection(int y0, int x0, int dy, int dx, Field field, int k,
 
     }
 
+
     bool inside = yCurrent >= 0 && xCurrent >= 0 &&
                   yCurrent < N && xCurrent < M ;
 
-    bool dangerCheck = getFieldState(yCurrent, xCurrent) == Field::EMPTY && inside;
+    bool dangerCheck = inside && getFieldState(yCurrent, xCurrent) == Field::EMPTY ;
+
+    if(checkMiddle){
+
+        bool nextInside = yCurrent + dy >= 0 && xCurrent + dx >= 0 &&
+                          yCurrent + dy< N && xCurrent + dx < M ;
+
+        bool middleCheck = nextInside && getFieldState(yCurrent+ dy,xCurrent + dx) == field;
+
+        if(inside && dangerCheck && middleCheck){
+
+            return counter == K-2;
+
+
+        }
+
+    }
 
     if(dangerCheck && k == K-1){
 
@@ -288,6 +305,8 @@ bool Board::isDangerousState(Field toCheck, bool winning_move) {
                         if(!(i == 0 && j == 0)){
 
                             if(checkInDirection(y, x, i, j, fState, K - 1)) states++;
+                            if(winning_move && checkInDirection(y, x, i, j, fState, K - 1, false,true)) return true;
+
 
                         }
 

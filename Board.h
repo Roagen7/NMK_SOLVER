@@ -61,7 +61,7 @@ private:
     int M; //width
     int K; //winning condition
 
-    bool checkInDirection(int y0, int x0, int dy, int dx, Field field, int k, bool omitFirst = false); //check fields in the direction of {dy,dx}
+    bool checkInDirection(int y0, int x0, int dy, int dx, Field field, int k, bool omitFirst = false, bool checkMiddle = false); //check fields in the direction of {dy,dx}
 
 };
 
