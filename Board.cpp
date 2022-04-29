@@ -266,48 +266,10 @@ bool Board::isDangerousState(Field toCheck, bool winning_move) {
 
         for(int x = 0; x < M; x++){
 
-            auto fState = getFieldState(y,x);
-
-            if(fState == toCheck){
-
                 int states = 0;
-                for(int i = -1; i <= 1; i++){
-
-                    for(int j = -1; j <= 1; j++){
-
-                        if(!(i == 0 && j == 0)){
-
-                            if(checkInDirection(y, x, i, j, fState, K - 1)) states++;
-                            if(winning_move && checkInDirection(y, x, i, j, fState, K - 1, false,true)) return true;
-
-
-                        }
-
-                    }
-
-                }
+                if(checkDangerInDirections(y,x, toCheck,states, winning_move)) return true;
 
                 if(states >= 2 || (states == 1 && winning_move)) return true;
-
-            } else if(fState == EMPTY){
-
-                for(int i = -1; i <= 1; i++){
-
-                    for(int j = -1; j <= 1; j++){
-
-                        if(!(i == 0 && j == 0)){
-
-                            if(checkInDirection(y, x, i, j, toCheck, K - 1, true)) return true;
-
-                        }
-
-                    }
-
-                }
-
-            }
-
-
 
         }
 
@@ -350,6 +312,36 @@ bool Board::dangerChecks(bool checkMiddle, int yCurrent, int xCurrent, int dy, i
     }
 
     return false;
+}
+
+bool Board::checkDangerInDirections(int y, int x, Board::Field toCheck, int& counter, bool winning_move) {
+
+    auto fState = getFieldState(y,x);
+
+    for(int i = -1; i <= 1; i++){
+
+        for(int j = -1; j <= 1; j++){
+
+            if(i == 0 && j == 0) continue;
+
+            if(fState == toCheck){
+
+                if(checkInDirection(y, x, i, j, fState, K - 1)) counter++;
+                if(winning_move && checkInDirection(y, x, i, j, fState, K - 1, false,true)) return true;
+
+            } else if(fState == EMPTY){
+
+                if(checkInDirection(y, x, i, j, toCheck, K - 1, true)) return true;
+
+            }
+
+        }
+
+    }
+
+    return false;
+
+
 }
 
 
